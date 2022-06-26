@@ -17,16 +17,39 @@ namespace move_picturebox
             InitializeComponent();
             MoveTimer.Tick += (sender, e) =>
             {
-                pictureBox1.Location = new Point(pictureBox1.Location.X - 10, pictureBox1.Location.Y);
+                switch (_currentKey)
+                {
+                    case Keys.Up:
+                        pictureBox1.Location = new Point(pictureBox1.Location.X, pictureBox1.Location.Y - 10);
+                        break;
+                    case Keys.Down:
+                        pictureBox1.Location = new Point(pictureBox1.Location.X, pictureBox1.Location.Y + 10);
+                        break;
+                    case Keys.A:        // Same as left
+                    case Keys.Left:
+                        pictureBox1.Location = new Point(pictureBox1.Location.X - 10, pictureBox1.Location.Y);
+                        break;
+                    case Keys.Right:
+                        pictureBox1.Location = new Point(pictureBox1.Location.X + 10, pictureBox1.Location.Y);
+                        break;
+                }
             };
         }
         Timer MoveTimer = new Timer { Interval = 25 };
+        Keys _currentKey;
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
-            if(e.KeyData == Keys.A)
+            switch (e.KeyData)
             {
-                MoveTimer.Enabled = true;
+                case Keys.A:
+                case Keys.Up:
+                case Keys.Down:
+                case Keys.Left:
+                case Keys.Right:
+                    _currentKey = e.KeyData;
+                    MoveTimer.Enabled = true; 
+                    break;
             }
         }
         protected override void OnKeyUp(KeyEventArgs e)
